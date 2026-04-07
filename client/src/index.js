@@ -1,3 +1,5 @@
+// server/index.js - Update your Model line to this:
+const Entity = mongoose.model('Entity', EntitySchema, 'OMEGA-db');
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
