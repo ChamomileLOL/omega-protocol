@@ -2,8 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 
-app.use(cors()); // This allows the Vercel Vision to talk to the Render Authority
+app.use(cors());
 
+// The Manifest Array: Required for the Search Algorithm
 const ENTITIES = [
   { id: 1, name: "Valac", impact: "GLOBAL_CATASTROPHE_INITIALIZED", level: 99 },
   { id: 2, name: "Stolas", impact: "ASTRONOMICAL_RECONNAISSANCE", level: 75 },
@@ -12,9 +13,10 @@ const ENTITIES = [
 ];
 
 app.get('/', (req, res) => {
+  // STRICT EQUALITY: We must send an object containing the 'entities' key
   res.json({
     protocol: "Omega-MERN",
-    entities: ENTITIES // The Client expects this specific key
+    entities: ENTITIES 
   });
 });
 
