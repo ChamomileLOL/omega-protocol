@@ -61,11 +61,27 @@ app.get('/', async (req, res) => {
 app.post('/synchronize', async (req, res) => {
   try {
     const { name, impact, level } = req.body;
+
+    // VALIDATION PROTOCOL
+    if (!name || name.length < 2) throw new Error("INVALID_NAME");
+    if (level < 0 || level > 100) throw new Error("THREAT_LEVEL_OUT_OF_BOUNDS");
+
     const newEntity = new Entity({ name, impact, level });
     await newEntity.save();
     res.status(201).json({ status: "ENTITY_SYNCHRONIZED", data: newEntity });
   } catch (err) {
-    res.status(500).json({ status: "SYNCHRONIZATION_FAILED", error: err.message });
+    res.status(400).json({ status: "VALIDATION_ERROR", message: err.message });
+  }
+});
+
+// server/index.js - Add the PURGE route
+app.delete('/purge/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Entity.findByIdAndDelete(id);
+    res.json({ status: "ENTITY_PURGED_FROM_MANIFEST" });
+  } catch (err) {
+    res.status(500).json({ status: "PURGE_FAILED", error: err.message });
   }
 });
 
