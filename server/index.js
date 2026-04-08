@@ -57,5 +57,17 @@ app.get('/', async (req, res) => {
   }
 });
 
+// Add this route to your server/index.js
+app.post('/synchronize', async (req, res) => {
+  try {
+    const { name, impact, level } = req.body;
+    const newEntity = new Entity({ name, impact, level });
+    await newEntity.save();
+    res.status(201).json({ status: "ENTITY_SYNCHRONIZED", data: newEntity });
+  } catch (err) {
+    res.status(500).json({ status: "SYNCHRONIZATION_FAILED", error: err.message });
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`OMNIPRESENCE_ON_PORT_${PORT}`));
